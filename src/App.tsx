@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Signup from './components/Signup';
-import Login from './components/Login';
-import SignUpForm from './components/SignupForm';
-import LoginForm from './components/LoginForm';
+import Signup from './components/signUpForm';
+import Login from './components/loginForm';
+import SignUpForm from './components/Signup';
+import LoginForm from './components/Login';
 
 const App: React.FC = () => {
   return (
