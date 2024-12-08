@@ -1,13 +1,15 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Join from './components/Join';
+import Signup from './components/Signup';
 import Login from './components/Login';
+import SignUpForm from './components/SignupForm';
+import LoginForm from './components/LoginForm';
 
 const App: React.FC = () => {
   return (
     <Router>
         <Routes>
-          <Route path="/join" Component={Join} />
+          <Route path="/signup" Component={Signup} />
           <Route path="/login" Component={Login} />
           <Route path="/" element={
           <div className="flex items-center justify-center h-screen">

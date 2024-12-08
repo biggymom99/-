@@ -1,13 +1,15 @@
 import React, { useState, useContext } from "react";
+import AuthService from "../services/AuthService";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import axios from "axios";
-import LoginForm from "./LoginForm";
+import SignUpForm from "./SignupForm";
 
-const Login: React.FC = () => {
+const Signup: React.FC = () => {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
+    nickname: "",
+    email: "",
   });
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -23,15 +25,7 @@ const Login: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "/api/login",
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await AuthService.signup(formData);
       setAuthData({
         ...response.data,
         isAdmin: response.data.role === 'ADMIN',
@@ -45,8 +39,8 @@ const Login: React.FC = () => {
   };
 
   return (
-    <LoginForm/>
+    <SignUpForm/>
   );
 };
 
-export default Login;
+export default Signup;
