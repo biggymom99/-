@@ -1,9 +1,14 @@
-//import { Button } from "../components/ui/Button"
 import Input from "../components/ui/Input"
 import Separator from "../components/ui/Separator"
-import LoginButton from "./ui/LoginButton"
 import SignupButton from "./ui/SignupButton"
-//import Image from "next/image"
+import SocialButton from "./ui/SocialButton"
+import {
+  handleKakaoLogin,
+  handleGoogleLogin,
+  handleFacebookLogin,
+} from "../services/socialLoginHandlers";
+
+
 
 export default function SignUpForm() {
   return (
@@ -70,39 +75,31 @@ export default function SignUpForm() {
             </div>
 
             <div className="flex justify-center gap-4 pt-2">
-              <button 
+              <SocialButton
+                onClick={handleKakaoLogin} // Kakao 로그인 핸들러 연결
                 className="w-8 h-8 rounded-full bg-black flex items-center justify-center border border-black hover:bg-gray-800"
-                aria-label="카카오 로그인"
+                label="카카오 로그인"
               >
-                <img
-                  src="/ic_kakaotalk.png"
-                  alt=""
-                  width={20}
-                  height={20}
-                />
-              </button>
-              <button 
+                <img src="/ic_kakaotalk.png" alt="" width={20} height={20} />
+              </SocialButton>
+
+              {/* Google 로그인 버튼 */}
+              <SocialButton
+                onClick={handleGoogleLogin} // Google 로그인 핸들러 연결
                 className="w-8 h-8 rounded-full bg-black flex items-center justify-center border border-black hover:bg-gray-800"
-                aria-label="구글 로그인"
+                label="구글 로그인"
               >
-                <img
-                  src="/ic_google.png"
-                  alt=""
-                  width={20}
-                  height={20}
-                />
-              </button>
-              <button 
+                <img src="/ic_google.png" alt="" width={20} height={20} />
+              </SocialButton>
+
+              {/* Facebook 로그인 버튼 */}
+              <SocialButton
+                onClick={handleFacebookLogin} // Facebook 로그인 핸들러 연결
                 className="w-8 h-8 rounded-full bg-black flex items-center justify-center border border-black hover:bg-gray-800"
-                aria-label="페이스북 로그인"
+                label="페이스북 로그인"
               >
-                <img
-                  src="/ic_facebook.png"
-                  alt=""
-                  width={20}
-                  height={20}
-                />
-              </button>
+                <img src="/ic_facebook.png" alt="" width={20} height={20} />
+              </SocialButton>
             </div>
           </form>
         </div>
