@@ -8,7 +8,7 @@ import Separator from "./ui/Separator";
 
 
 
-export default function LoginForm() {
+export default function Login() {
   return (
     <div className="min-h-screen flex flex-col bg-[#3B75B5]">
       <nav className="bg-[#2E4D6C] p-4 rounded-b-none">

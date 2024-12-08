@@ -1,52 +1,50 @@
-import React, { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
+import React, { useState } from "react";
 import axios from "axios";
-import LoginForm from "./Login";
+import Login from "./Login";
 
-const Login: React.FC = () => {
-  const [formData, setFormData] = useState({
+interface LoginFormData {
+  username: string;
+  password: string;
+}
+
+const LoginForm: React.FC = () => {
+  const [formData, setFormData] = useState<LoginFormData>({
     username: "",
     password: "",
   });
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
-  const { setAuthData } = useContext(AuthContext)!;
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
+
+    // 간단한 입력값 검증
+    if (!formData.username || !formData.password) {
+      setError("아이디와 비밀번호를 모두 입력해주세요.");
+      return;
+    }
+
     try {
-      const response = await axios.post(
-        "/api/login",
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      setAuthData({
-        ...response.data,
-        isAdmin: response.data.role === 'ADMIN',
-      });
-      localStorage.setItem("authData", JSON.stringify(response.data));
-      localStorage.setItem("token", response.data.token);
-      navigate("/");
-    } catch (error: any) {
-      setError(error.message);
+      setLoading(true);
+      const response = await axios.post("https://your-api-url.com/login", formData);
+      setLoading(false);
+      console.log("로그인 성공:", response.data);
+      // 성공 시 처리 (예: 토큰 저장, 리다이렉트 등)
+    } catch (err: any) {
+      setLoading(false);
+      setError(err.response?.data?.message || "로그인 중 오류가 발생했습니다.");
     }
   };
 
   return (
-    <LoginForm/>
+    <Login/>
   );
 };
 
-export default Login;
+export default LoginForm;

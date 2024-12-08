@@ -1,50 +1,63 @@
-import React, { useState, useContext } from "react";
-import {signUp, SignUpData} from "../services/AuthService";
-import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
+import React, { useState } from "react";
+import axios from "axios";
 import SignUp from "./Signup";
 
-const SignupForm: React.FC = () => {
-  const [formData, setFormData] = useState<SignUpData>({
+interface SignUpFormData {
+  username: string;
+  password: string;
+  confirmPassword: string;
+}
+
+const SignUpForm: React.FC = () => {
+  const [formData, setFormData] = useState<SignUpFormData>({
     username: "",
     password: "",
     confirmPassword: "",
   });
 
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<boolean>(false);
-  const [successMessage, setSuccessMessage] = useState<string>("");
-
+  const [success, setSuccess] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const validateForm = (): string | null => {
+    if (!formData.username || !formData.password || !formData.confirmPassword) {
+      return "모든 필드를 입력해주세요.";
+    }
+    if (formData.password !== formData.confirmPassword) {
+      return "비밀번호가 일치하지 않습니다.";
+    }
+    return null;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    setSuccess(false);
+    setSuccess(null);
 
-    if (formData.password !== formData.confirmPassword) {
-      setError("비밀번호가 일치하지 않습니다.");
+    const validationError = validateForm();
+    if (validationError) {
+      setError(validationError);
       return;
     }
 
     try {
-      const response = await signUp({
+      setLoading(true);
+      const response = await axios.post("https://your-api-url.com/auth/signup", {
         username: formData.username,
         password: formData.password,
-        confirmPassword: formData.confirmPassword,
       });
-
-      console.log("회원가입 성공:", response);
-
-      // 서버로부터 반환된 메시지를 성공 상태로 설정
-      setSuccessMessage(response.message || "회원가입이 성공적으로 완료되었습니다.");
-      setSuccess(true);
+      setLoading(false);
+      setSuccess("회원가입이 성공적으로 완료되었습니다.");
+      console.log("회원가입 성공:", response.data);
     } catch (err: any) {
-      setError(err.message);
+      setLoading(false);
+      setError(err.response?.data?.message || "회원가입 중 오류가 발생했습니다.");
+      console.error("회원가입 실패:", err);
     }
   };
 
@@ -53,4 +66,4 @@ const SignupForm: React.FC = () => {
   );
 };
 
-export default SignupForm;
+export default SignUpForm;
